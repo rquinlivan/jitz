@@ -6,7 +6,7 @@ import com.twitter.finatra.http.Controller
 class HealthCheckController extends Controller {
 
   get("/health") { req: Request =>
-    "imok"
+    "imok!"
   }
 
 }
