@@ -1,16 +1,19 @@
 package jitz.service
 
-import com.google.inject.Inject
-import jitz.controller.presentation.Score
-import jitz.model.entities.{Competitor, CompetitorModel, Match, MatchId, MatchModel, MatchScore}
-import slick.dbio.Effect
+import com.google.inject.{Inject, Singleton}
+import jitz.controller.response.Score
+import jitz.model.entities._
 import slick.jdbc.PostgresProfile.api._
-import slick.sql.FixedSqlStreamingAction
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class MatchService @Inject() (db: Database) {
+
+  def recordPoints(matchId: MatchId, competitorId: CompetitorId, points: Int): Future[Int] = {
+     val insert = MatchScore.matchScoreTable.forUpdate += MatchScoreModel(matchId, competitorId, points)
+    db.run(insert)
+  }
 
   def scoreForMatch(matchId: MatchId)(implicit ec: ExecutionContext): Future[Score] = {
     val queryScoreA = Match.matchTable
@@ -28,7 +31,7 @@ class MatchService @Inject() (db: Database) {
 //          losingScore = 0
 //        )
 //      }
-    }
+      Future(Score("hi", 1, "bye", 2))
 
 
 //      .map { case ((m, c1), c2) =>

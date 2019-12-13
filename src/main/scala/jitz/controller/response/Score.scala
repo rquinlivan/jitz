@@ -1,4 +1,4 @@
-package jitz.controller.presentation
+package jitz.controller.response
 
 case class Score(
   winningName: String,

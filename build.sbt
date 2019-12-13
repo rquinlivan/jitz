@@ -9,6 +9,7 @@ lazy val versions = new {
   val guice = "4.0"
   val typesafeConfig = "1.3.1"
   val logback = "1.2.3"
+  val flyway = "6.1.1"
 }
 
 scalaVersion := versions.scala
@@ -23,6 +24,8 @@ libraryDependencies ++= Seq(
 
    "org.scalatest" %% "scalatest" % "3.0.8" % "test",
   "ch.qos.logback" % "logback-classic" % versions.logback,
+
+  "org.flywaydb" % "flyway-core" % versions.flyway,
 
   "com.twitter" %% "finatra-http" % versions.finatra % "test",
   "com.twitter" %% "finatra-jackson" % versions.finatra % "test",
