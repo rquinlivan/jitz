@@ -1,7 +1,7 @@
-package jitz.model
+package jitz.model.entities
 
-import slick.lifted.Tag
 import slick.jdbc.PostgresProfile.api._
+import slick.lifted.Tag
 
 case class TournamentId(value: Long) extends MappedTo[Long]
 

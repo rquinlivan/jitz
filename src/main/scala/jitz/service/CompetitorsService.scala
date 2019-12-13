@@ -1,10 +1,11 @@
 package jitz.service
 
 import com.google.inject.{Inject, Singleton}
-import jitz.model.{Competitor, CompetitorModel, TournamentCompetitor, TournamentId}
-import jitz.model.Competitor._
-import jitz.model.Tournament._
-import jitz.model.TournamentCompetitor._
+import jitz.model.entities.{TournamentCompetitor, TournamentId}
+import jitz.model.entities.Competitor._
+import jitz.model.entities.Tournament._
+import jitz.model.entities.TournamentCompetitor._
+import jitz.model.entities.{CompetitorModel, TournamentId}
 import slick.jdbc.PostgresProfile.api._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -15,8 +16,8 @@ class CompetitorsService @Inject() (db: Database) {
   def listCompetitors(tournamentId: TournamentId)(implicit ec: ExecutionContext): Future[Seq[CompetitorModel]] = {
     val query = tournamentCompetitor
       .filter(_.tournamentId === tournamentId)
-      .join(competitor).on(_.competitorId === _.id)
-      .map(tup => tup._2)
+      .join(competitorTable).on(_.competitorId === _.id)
+      .map({ case (_, c) => c })
       .result
     for {
       competitors <- db.run(query)

@@ -1,7 +1,7 @@
-package jitz.model
+package jitz.model.entities
 
-import slick.lifted.Tag
 import slick.jdbc.PostgresProfile.api._
+import slick.lifted.Tag
 
 case class CompetitorId(value: Long) extends MappedTo[Long]
 
@@ -19,5 +19,5 @@ class Competitor(tag: Tag) extends Table[CompetitorModel](tag, "competitor") {
 }
 
 object Competitor {
-  val competitor = TableQuery[Competitor]
+  val competitorTable = TableQuery[Competitor]
 }
