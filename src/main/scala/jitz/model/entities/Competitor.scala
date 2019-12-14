@@ -5,17 +5,19 @@ import slick.lifted.Tag
 
 case class CompetitorId(value: Long) extends MappedTo[Long]
 
+object CompetitorId { val NewRecord = CompetitorId(-1) }
+
 case class CompetitorModel(
-  id: CompetitorId,
+  id: Option[CompetitorId],
   firstName: String,
   lastName: String
 )
 
 class Competitor(tag: Tag) extends Table[CompetitorModel](tag, "competitor") {
-  def id = column[CompetitorId]("id")
+  def id = column[CompetitorId]("id", O.PrimaryKey, O.AutoInc)
   def firstName = column[String]("first_name")
   def lastName = column[String]("last_name")
-  def * = (id, firstName, lastName) <> (CompetitorModel.tupled, CompetitorModel.unapply)
+  def * = (id.?, firstName, lastName) <> (CompetitorModel.tupled, CompetitorModel.unapply)
 }
 
 object Competitor {

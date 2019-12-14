@@ -2,6 +2,7 @@ package jitz.controller
 
 import com.google.inject.{Inject, Singleton}
 import com.twitter.finagle.http.Request
+import com.twitter.finagle.thrift.Headers.Response
 import com.twitter.finatra.http.Controller
 import jitz.controller.request.RecordPointsRequest
 import jitz.model.entities.{CompetitorId, MatchId}
@@ -16,7 +17,7 @@ class MatchController @Inject() (matchService: MatchService)(implicit ec: Execut
     matchService.scoreForMatch(id)
   }
 
-  post("/match/:id/points") { req: RecordPointsRequest =>
-    matchService.recordPoints(MatchId(req.match_id), CompetitorId(req.competitor_id), req.points)
+  post("/points") { req: RecordPointsRequest =>
+    matchService.recordPoints(MatchId(req.match_id), CompetitorId(req.competitor_id), req.points).map { _ => response.ok }
   }
 }

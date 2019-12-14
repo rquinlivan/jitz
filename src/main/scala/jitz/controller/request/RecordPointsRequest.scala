@@ -5,7 +5,7 @@ package jitz.controller.request
   * @since 2019-12-13.
   */
 case class RecordPointsRequest(
-                              match_id: Long,
-                              competitor_id: Long,
-                              points: Int
-                              )
+  match_id: Long,
+  competitor_id: Long,
+  points: Int
+)
