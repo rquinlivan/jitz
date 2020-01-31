@@ -6,7 +6,7 @@ import jitz.server.JitzServer
 import org.scalatest.WordSpec
 
 class MatchFeatureTest extends FeatureTest with BaseFeatureTest {
-
-
-
+//  test("Creating a match") {
+//    post("/match", Match)
+//  }
 }

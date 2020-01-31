@@ -43,5 +43,4 @@ trait BaseFeatureTest extends FeatureTest {
   }
 
   def await[T](f: Future[T]): T = Await.result(f, Duration.Inf)
-
 }

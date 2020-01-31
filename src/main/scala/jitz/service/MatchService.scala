@@ -10,8 +10,13 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class MatchService @Inject() (db: Database) {
 
+  def createMatch(competitorA: CompetitorId, competitorB: CompetitorId, tournamentId: TournamentId): Future[Int] = {
+    val insert = Match.matchTable.forUpdate += MatchModel(MatchId(-1), competitorA, competitorB, tournamentId)
+    db.run(insert)
+  }
+
   def recordPoints(matchId: MatchId, competitorId: CompetitorId, points: Int): Future[Int] = {
-     val insert = MatchScore.matchScoreTable.forUpdate += MatchScoreModel(matchId, competitorId, points)
+    val insert = MatchScore.matchScoreTable.forUpdate += MatchScoreModel(matchId, competitorId, points)
     db.run(insert)
   }
 
