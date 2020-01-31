@@ -2,6 +2,12 @@ package jitz.feature
 
 class HealthCheckFeatureTest extends BaseFeatureTest {
   test("Calling /health") {
-    get("/health").contentString shouldBe "imok!"
+    await {
+      for {
+        res <- get[String]("/health")
+      } yield {
+        res shouldBe "imok!"
+      }
+    }
   }
 }
