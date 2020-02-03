@@ -4,7 +4,7 @@ import com.google.inject.Module
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.routing.HttpRouter
 import jitz.controller.{CompetitorController, HealthCheckController, MatchController}
-import jitz.module.{ConfigurationModule, DatabaseModule}
+import jitz.module.{ConfigurationModule, DatabaseModule, JacksonModule}
 
 class JitzServer extends HttpServer {
 
@@ -14,6 +14,8 @@ class JitzServer extends HttpServer {
       .add[MatchController]
       .add[CompetitorController]
   }
+
+  override def jacksonModule: Module = JacksonModule
 
   override val modules: Seq[Module] = Seq(
     DatabaseModule,

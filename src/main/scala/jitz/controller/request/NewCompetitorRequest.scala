@@ -4,6 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.twitter.finatra.validation.NotEmpty
 
 case class NewCompetitorRequest(
-  @JsonProperty("first_name") @NotEmpty firstName: String,
-  @JsonProperty("last_name") @NotEmpty lastName: String
+  @JsonProperty("firstName") @NotEmpty firstName: String,
+  @JsonProperty("lastName") @NotEmpty lastName: String
 )

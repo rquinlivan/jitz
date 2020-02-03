@@ -32,8 +32,14 @@ class CompetitorService @Inject() (db: Database) {
 
   def createCompetitor(firstName: String, lastName: String)(implicit ec: ExecutionContext): Future[CompetitorId] = {
     for {
-      newId <- db.run(competitorTable += CompetitorModel(id = None, firstName = firstName, lastName = lastName))
-    } yield CompetitorId(newId)
+      newId <- db.run {
+        competitorTable returning competitorTable.map(_.id) += CompetitorModel(
+          id = None,
+          firstName = firstName,
+          lastName = lastName
+        )
+      }
+    } yield newId
   }
 
 //  def removeCompetitor(tournamentId: TournamentId, firstName: String, lastName: String)(implicit ec: ExecutionContext) = {

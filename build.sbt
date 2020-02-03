@@ -11,6 +11,7 @@ lazy val versions = new {
   val logback = "1.2.3"
   val flyway = "6.1.1"
   val postgres = "9.3-1100-jdbc4"
+  val circe = "0.12.3"
 }
 
 scalaVersion := versions.scala
@@ -36,6 +37,12 @@ libraryDependencies ++= Seq(
 
   "org.scalatest" %% "scalatest" % "3.0.8" % "test",
   "ch.qos.logback" % "logback-classic" % versions.logback,
+
+  // Adding circe because Jackson doesn't always play nice with case classes
+
+  "io.circe" %% "circe-core" % versions.circe,
+  "io.circe" %% "circe-generic" % versions.circe,
+  "io.circe" %% "circe-parser" % versions.circe,
 
   // DB stuff
   "com.typesafe.slick" % "slick_2.12" % versions.slick,

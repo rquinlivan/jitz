@@ -5,6 +5,7 @@ import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 import jitz.controller.exceptions.CompetitorNotFound
 import jitz.controller.request.NewCompetitorRequest
+import jitz.controller.response.Competitor
 import jitz.model.entities.CompetitorId
 import jitz.service.CompetitorService
 
@@ -28,7 +29,9 @@ class CompetitorController @Inject() (competitorService: CompetitorService)(impl
     for {
       id <- competitorService.createCompetitor(firstName = req.firstName, lastName = req.lastName)
       competitor <- competitorService.showCompetitor(id)
-    } yield competitor.getOrElse(throw new Exception("Could not create competitor!"))
+    } yield competitor.map { c =>
+      Competitor(id = c.id.map(_.value).getOrElse(-1), firstName = c.firstName, lastName = c.lastName)
+    }.getOrElse(throw new Exception("Could not create competitor!"))
   }
 
 }

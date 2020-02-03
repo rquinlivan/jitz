@@ -1,13 +1,12 @@
 package jitz.feature
 
+import com.twitter.finagle.http.Status
+
 class HealthCheckFeatureTest extends BaseFeatureTest {
   test("Calling /health") {
-    await {
-      for {
-        res <- get[String]("/health")
-      } yield {
-        res shouldBe "imok!"
-      }
-    }
+    server.httpGet(
+      path = "/health",
+      andExpect = Status.Ok
+    ).contentString shouldBe "imok!"
   }
 }

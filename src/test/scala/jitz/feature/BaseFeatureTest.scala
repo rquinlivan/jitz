@@ -10,35 +10,48 @@ import jitz.server.JitzServer
 import org.scalatest.WordSpec
 import scala.concurrent._
 import scala.concurrent.duration._
-
 import scala.concurrent.{Await, ExecutionContext, Future}
+
+import io.circe._
+import io.circe.parser._
+import io.circe.generic.auto._
+import io.circe.syntax._
 
 trait BaseFeatureTest extends FeatureTest {
 
-  implicit val objectMapper: FinatraObjectMapper = FinatraObjectMapper.create()
   implicit val ec: ExecutionContext = ExecutionContext.fromExecutorService(Executors.newFixedThreadPool(5))
+  implicit val objectMapper: FinatraObjectMapper = server.mapper
 
   override protected def server = {
     new EmbeddedHttpServer(new JitzServer())
   }
 
-  def get[R](path: String)(implicit ec: ExecutionContext): Future[R] = {
+  def get[R](path: String)(implicit ec: ExecutionContext, decoder: Decoder[R]): Future[R] = {
     Future {
       val body = server.httpGet(
         path = path,
         andExpect = Status.Ok
       ).contentString
-      objectMapper.parse[R](body)
+
+      decode[R](body) match {
+        case Right(value) => value
+        case Left(err)  => throw new RuntimeException(err) // Todo
+      }
     }
   }
 
-  def post[T, R](path: String, t: T)(implicit objectMapper: FinatraObjectMapper, ec: ExecutionContext): Future[R] = {
+  def post[T, R](path: String, t: T)(implicit ec: ExecutionContext, encoder: Encoder[T], decoder: Decoder[R]): Future[R] = {
     Future {
-      server.httpPostJson[R](
+      val json = t.asJson.toString()
+      val response = server.httpPost(
         path = path,
         headers = Map("Content-Type" -> "application/json"),
-        postBody = objectMapper.convert(t)
-      )
+        postBody = json
+      ).contentString
+      decode[R](response) match {
+        case Right(value) => value
+        case Left(err) => throw new RuntimeException(err)
+      }
     }
   }
 
