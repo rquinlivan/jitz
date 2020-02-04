@@ -32,11 +32,7 @@ trait BaseFeatureTest extends FeatureTest {
         path = path,
         andExpect = Status.Ok
       ).contentString
-
-      decode[R](body) match {
-        case Right(value) => value
-        case Left(err)  => throw new RuntimeException(err) // Todo
-      }
+      jsonConvert(body)
     }
   }
 
@@ -48,10 +44,23 @@ trait BaseFeatureTest extends FeatureTest {
         headers = Map("Content-Type" -> "application/json"),
         postBody = json
       ).contentString
-      decode[R](response) match {
-        case Right(value) => value
-        case Left(err) => throw new RuntimeException(err)
-      }
+      jsonConvert(response)
+    }
+  }
+
+  def delete[R](path: String)(implicit ec: ExecutionContext, decoder: Decoder[R]): Future[Boolean] = {
+    Future {
+      val response = server.httpDelete(
+        path = path,
+        headers = Map("Content-Type" -> "application/json")
+      ).contentString
+    }.map(_ => true)
+  }
+
+  def jsonConvert[R](response: String)(implicit decoder: Decoder[R]): R = {
+    decode[R](response) match {
+      case Right(value) => value
+      case Left(err) => throw new RuntimeException(err)
     }
   }
 

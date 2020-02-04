@@ -19,7 +19,8 @@ class CompetitorController @Inject() (competitorService: CompetitorService)(impl
     for {
       maybeCompetitor <- competitorService.showCompetitor(id)
     } yield {
-      maybeCompetitor match {
+      maybeCompetitor.map(Competitor(_)) match {
+        case Some(c) => c
         case None => throw new CompetitorNotFound(id = id.value)
       }
     }
@@ -32,6 +33,11 @@ class CompetitorController @Inject() (competitorService: CompetitorService)(impl
     } yield competitor.map { c =>
       Competitor(id = c.id.map(_.value).getOrElse(-1), firstName = c.firstName, lastName = c.lastName)
     }.getOrElse(throw new Exception("Could not create competitor!"))
+  }
+
+  delete("/competitor/:id") { req: Request =>
+    val id = CompetitorId(req.getLongParam("id"))
+    competitorService.removeCompetitor(id)
   }
 
 }

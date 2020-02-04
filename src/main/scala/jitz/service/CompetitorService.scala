@@ -42,11 +42,9 @@ class CompetitorService @Inject() (db: Database) {
     } yield newId
   }
 
-//  def removeCompetitor(tournamentId: TournamentId, firstName: String, lastName: String)(implicit ec: ExecutionContext) = {
-//    for {
-//      competitors <- db.run(competitor.filter { c => c.firstName === firstName && c.lastName === lastName })
-//
-//    } yield Unit
-//
-//  }
+  def removeCompetitor(competitorId: CompetitorId)(implicit ec: ExecutionContext): Future[Boolean] = {
+    for {
+      _ <- db.run(competitorTable.filter(_.id === competitorId).delete)
+    } yield true
+  }
 }
