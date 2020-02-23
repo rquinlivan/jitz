@@ -1,6 +1,6 @@
 # jitz
 
-Jitz aims to be a professional quality software solution for running [Brazilian jiu jitsu tournaments](Brazilian jiu jitsu tournaments).
+Jitz aims to be a professional quality software solution for running [Brazilian jiu jitsu tournaments](https://www.usgrappling.com/rules/).
 
 
 ## Backend server
