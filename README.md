@@ -10,6 +10,7 @@ Migrations are managed with [Flyway](https://flywaydb.org/). It uses the [Slick 
 
 ## Dev setup
 
+
 ### Start a database
 
 `./scripts/start_db.sh`
@@ -24,3 +25,10 @@ Migrations are done with Flyway. Migration files live in `/migrations/sql`.
 
 `sbt test`
 
+### Run the server
+
+`sbt run`
+
+There should now be a server up and running on post `8888`. Check it like so:
+
+`curl -svi localhost:8888/health`
