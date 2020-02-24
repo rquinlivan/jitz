@@ -3,4 +3,6 @@ jdk: openjdk8
 scala:
   - 2.12.10
 script:
+  - ./script/start_db.sh
+  - sbt flywayMigrate
   - sbt compile test
