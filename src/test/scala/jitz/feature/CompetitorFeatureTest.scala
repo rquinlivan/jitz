@@ -1,7 +1,7 @@
 package jitz.feature
 
 import com.twitter.finagle.http.Status
-import jitz.controller.request.NewCompetitorRequest
+import jitz.controller.request.{ModifyCompetitorRequest, NewCompetitorRequest}
 import jitz.model.entities.CompetitorModel
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -52,6 +52,26 @@ class CompetitorFeatureTest extends BaseFeatureTest {
         )
       }
     }
+  }
+
+  test("Modify a competitor") {
+    val newComp = NewCompetitorRequest("John", "Denver")
+    await {
+      for {
+        created <- post[NewCompetitorRequest, Competitor]("/competitor", newComp)
+        modComp = ModifyCompetitorRequest(firstName = Some("Jack"), lastName = None, id = created.id)
+        modified <- put[ModifyCompetitorRequest, Competitor](s"/competitor/${created.id}", modComp)
+      } yield {
+        created.firstName shouldBe "John"
+        created.lastName shouldBe "Denver"
+
+        modified.firstName shouldBe "Jack"
+        modified.lastName shouldBe "Denver"
+
+        created.id shouldBe modified.id
+      }
+    }
+
   }
 
 }

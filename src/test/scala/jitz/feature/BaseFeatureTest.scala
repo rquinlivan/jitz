@@ -48,6 +48,18 @@ trait BaseFeatureTest extends FeatureTest {
     }
   }
 
+  def put[T, R](path: String, t: T)(implicit ec: ExecutionContext, encoder: Encoder[T], decoder: Decoder[R]): Future[R] = {
+    Future {
+      val json = t.asJson.toString()
+      val response = server.httpPut(
+        path = path,
+        headers = Map("Content-Type" -> "application/json"),
+        putBody = json
+      ).contentString
+      jsonConvert(response)
+    }
+  }
+
   def delete[R](path: String)(implicit ec: ExecutionContext, decoder: Decoder[R]): Future[Boolean] = {
     Future {
       val response = server.httpDelete(

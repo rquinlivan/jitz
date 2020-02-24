@@ -47,4 +47,20 @@ class CompetitorService @Inject() (db: Database) {
       _ <- db.run(competitorTable.filter(_.id === competitorId).delete)
     } yield true
   }
+
+  def modifyCompetitor(competitorId: CompetitorId, firstName: Option[String], lastName: Option[String])
+    (implicit ec: ExecutionContext): Future[Boolean] = {
+    for {
+      _ <- db.run {
+        val query = competitorTable.filter(_.id === competitorId)
+
+        (firstName, lastName) match {
+          case (Some(f), None) =>       query.map(c => (c.firstName)).update(f)
+          case (Some(f), Some(l)) =>    query.map(c => (c.firstName, c.lastName)).update((f,l))
+          case (None, Some(l)) =>       query.map(c => (c.lastName)).update(l)
+          case _ =>                     DBIO.successful(true)
+        }
+      }
+    } yield true
+  }
 }
