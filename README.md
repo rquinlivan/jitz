@@ -1,4 +1,4 @@
-# jitz
+# Jitz
 
 Jitz aims to be a professional quality software solution for running [Brazilian jiu jitsu tournaments](https://www.usgrappling.com/rules/).
 
